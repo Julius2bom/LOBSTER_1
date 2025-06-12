@@ -433,20 +433,17 @@
 
 <style>
   .context-menu {
-    position: fixed;
-    bottom: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    display: none;
-    flex-direction: row;
-    gap: 20px;
-    padding: 15px 20px;
-    z-index: 3000;
-    align-items: center;
-  }
+  position: absolute;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  display: none;
+  gap: 20px;
+  padding: 15px 20px;
+  z-index: 3000;
+  align-items: center;
+}
+
 
   .context-menu button {
     background: none;
@@ -464,42 +461,60 @@
 <script>
   const contextMenu = document.getElementById('contextMenu');
   let currentBadge = null;
+const contextMenu = document.getElementById('contextMenu');
 
-  document.querySelectorAll('.badge-card').forEach(card => {
-    card.addEventListener('click', (e) => {
-      e.stopPropagation();
-      currentBadge = card;
-      contextMenu.style.display = 'flex';
-    });
+document.querySelectorAll('.badge-card').forEach(card => {
+  card.addEventListener('click', (e) => {
+    e.stopPropagation();
+    currentBadge = card;
+
+    // Obtenir la position du badge
+    const rect = card.getBoundingClientRect();
+
+    // Positionner le menu juste au-dessus du badge
+    const menuHeight = contextMenu.offsetHeight || 60; // valeur approximative si encore invisible
+    const top = rect.top + window.scrollY - menuHeight - 10;
+    const left = rect.left + rect.width / 2;
+
+    contextMenu.style.top = `${top}px`;
+    contextMenu.style.left = `${left}px`;
+    contextMenu.style.transform = 'translateX(-50%)';
+    contextMenu.style.display = 'flex';
   });
+});
 
-  document.addEventListener('click', () => {
-    contextMenu.style.display = 'none';
+// Fermer si on clique ailleurs
+document.addEventListener('click', () => {
+  contextMenu.style.display = 'none';
+  currentBadge = null;
+});
+
+// Supprimer
+document.getElementById('deleteBtn').addEventListener('click', () => {
+  if (currentBadge) {
+    currentBadge.remove();
     currentBadge = null;
-  });
-
-  document.getElementById('cancelBtn').addEventListener('click', () => {
     contextMenu.style.display = 'none';
-    currentBadge = null;
-  });
+  }
+});
 
-  document.getElementById('editBtn').addEventListener('click', () => {
-    if (currentBadge) {
-      const newText = prompt("Modifier le texte du badge :", currentBadge.querySelector('span').textContent);
-      if (newText !== null) {
-        currentBadge.querySelector('span').textContent = newText;
-      }
-      contextMenu.style.display = 'none';
+// Modifier
+document.getElementById('editBtn').addEventListener('click', () => {
+  if (currentBadge) {
+    const newText = prompt("Modifier le texte du badge :", currentBadge.querySelector('span').textContent);
+    if (newText !== null) {
+      currentBadge.querySelector('span').textContent = newText;
     }
-  });
+    contextMenu.style.display = 'none';
+  }
+});
 
-  document.getElementById('deleteBtn').addEventListener('click', () => {
-    if (currentBadge) {
-      currentBadge.remove();
-      contextMenu.style.display = 'none';
-      currentBadge = null;
-    }
-  });
+// Annuler
+document.getElementById('cancelBtn').addEventListener('click', () => {
+  contextMenu.style.display = 'none';
+  currentBadge = null;
+});
+
 </script>
 </body>
 </html>
