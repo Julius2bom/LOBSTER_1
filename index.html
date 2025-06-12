@@ -208,13 +208,42 @@
       border-radius: 20px;
       opacity: 0;
       transition: opacity 0.5s ease;
-      z-index: 2000;
+      z-index: 2000;conte
       font-size: 1rem;
     }
 
     .toast.show {
       opacity: 1;
     }
+	
+	.context-menu {
+  position: fixed;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  display: flex;
+  gap: 20px;
+  padding: 15px 20px;
+  z-index: 3000;
+  display: none;
+  align-items: center;
+}
+
+.context-menu button {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.context-menu button:hover {
+  transform: scale(1.2);
+}
+
   </style>
 </head>
 <body>
@@ -226,14 +255,13 @@
   <div class="intro-content">
     <button id="enterBtn">ENTRER</button>
   </div>
+ </div>
+<div class="context-menu" id="contextMenu">
+  <button id="deleteBtn">🗑️</button>
+  <button id="editBtn">✏️</button>
+  <button id="cancelBtn">❌</button>
 </div>
 
-  <div class="app">
-    <<div class="header">
-      <img src="src/header.png" alt="Header Image" class="header-img" />
-     <div class="badge-counter-container">
-  <div class="badge-progress-bg"><span id="badge-counter">0/20</span></div>
-</div>
 </div
     </div>
 
@@ -355,6 +383,49 @@
     filterBadges('all');
     updateBadgeCounter();
   });
+  let longPressTimer;
+let currentBadge = null;
+const contextMenu = document.getElementById('contextMenu');
+
+document.querySelectorAll('.badge-card').forEach(card => {
+  card.addEventListener('click', (e) => {
+    e.stopPropagation(); // évite de déclencher des événements globaux
+    currentBadge = card;
+    contextMenu.style.display = 'flex';
+  });
+});
+
+// Fermer le menu contextuel si on clique ailleurs
+document.addEventListener('click', () => {
+  contextMenu.style.display = 'none';
+  currentBadge = null;
+});
+
+// Supprimer
+document.getElementById('deleteBtn').addEventListener('click', () => {
+  if (currentBadge) {
+    currentBadge.remove();
+    currentBadge = null;
+    contextMenu.style.display = 'none';
+  }
+});
+
+// Modifier
+document.getElementById('editBtn').addEventListener('click', () => {
+  if (currentBadge) {
+    const newText = prompt("Modifier le texte du badge :", currentBadge.querySelector('span').textContent);
+    if (newText !== null) {
+      currentBadge.querySelector('span').textContent = newText;
+    }
+    contextMenu.style.display = 'none';
+  }
+});
+
+// Annuler
+document.getElementById('cancelBtn').addEventListener('click', () => {
+  contextMenu.style.display = 'none';
+  currentBadge = null;
+});
 </script>
 
 
