@@ -282,12 +282,17 @@
 
   // ✅ Affichage de l'app au clic sur ENTRER
   enterBtn.addEventListener('click', () => {
+  introScreen.classList.add('slide-up');
+
+  // attendre la fin de l'animation (800ms) avant d’afficher l’app
+  setTimeout(() => {
     introScreen.style.display = 'none';
     app.style.display = 'block';
     updateCursor(0);
     filterBadges('all');
     updateBadgeCounter();
-  });
+  }, 800);
+});
 
   function updateCursor(index) {
     cursor.style.left = `${index * 33.33}%`;
@@ -372,6 +377,19 @@
   justify-content: center;
   align-items: flex-end; /* change selon la position du bouton */
   padding-bottom: 80px;
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+.intro-screen.slide-up {
+  animation: slide-up 0.8s ease forwards;
 }
 
 #enterBtn {
