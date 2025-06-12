@@ -263,6 +263,9 @@
     <div class="floating-button" id="notifBtn"></div>
     <div class="toast" id="toast">Flash envoyé à Twinie !</div>
   </div>
+  <div class="intro-overlay" id="introOverlay">
+  <span>Taper ici pour commencer</span>
+</div>
 
   <script>
     const enterBtn = document.getElementById('enterBtn');
@@ -367,9 +370,33 @@ enterBtn.addEventListener('click', () => {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100px; /* zone basse uniquement */
+  height: 100px;
+  background: rgba(0, 0, 0, 0.4); /* fond semi-transparent */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 2;
   cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.intro-overlay:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.intro-overlay span {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  font-family: 'Montserrat', sans-serif;
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);
+  animation: fadeInUp 1s ease-in-out;
+}
+
+/* petite animation d'apparition du texte */
+@keyframes fadeInUp {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
 }
 #enterBtn {
   position: absolute;
