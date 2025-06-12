@@ -1,1 +1,424 @@
-<!-- Final HTML will be written dynamically -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Twinies_v1</title>
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+    html, body { width: 100%; height: 100%; background: #f5faff; overflow: hidden; }
+
+    .app {
+      width: 100%; max-width: 480px; margin: 0 auto;
+      height: 100vh; overflow: hidden; position: relative;
+    }
+.app {
+  z-index: 1;
+  position: relative;
+}
+
+.intro-screen {
+  z-index: 5000;
+  background-color: black;
+}
+    .header {
+      width: 100%; height: 20vh;
+      overflow: hidden; position: fixed; top: 0; left: 0;
+      z-index: 1000;
+    }
+
+    .header-img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    .badge-counter-container {
+  position: absolute;
+  bottom: 25px;
+  left: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 10;
+}
+
+.badge-label {
+  color: yellow;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.badge-progress-bg {
+  color: white;
+  font-weight: bold;
+  padding: 6px 60px;
+  border-radius: 10px;
+  font-size: 0.6rem; /* lisible */
+}
+
+    .badge-section {
+      position: absolute;
+      top: 26vh;
+      bottom: 60px;
+      overflow-y: auto;
+      background-image: url('src/background-badges.png');
+      width: 100%;
+      padding: 4vw;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4vw;
+      justify-content: center;
+      padding-bottom: 160px;
+    }
+
+    .tabs {
+      position: fixed; top: 20vh; left: 0;
+      width: 100%; height: 6vh;
+      background-image: url('src/tab.png');
+      background-size: cover;
+      background-position: center;
+      display: flex; justify-content: space-around; align-items: center;
+      z-index: 999;
+    }
+
+    .tabs::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.4); z-index: 0;
+    }
+
+    .tab {
+      flex: 1; text-align: center; position: relative;
+      z-index: 1; cursor: pointer;
+    }
+
+    .tab img {
+      width: 32px; height: 32px;
+    }
+
+    .tab-cursor {
+      position: absolute; bottom: 0;
+      height: 4px; width: 33.33%;
+      background: white; border-radius: 2px;
+      transition: left 0.3s ease; left: 0; z-index: 2;
+    }
+
+    .badge-section {
+      position: absolute;
+      top: calc(20vh + 6vh); bottom: 60px;
+      overflow-y: auto;
+      background-image: url('src/background-badges.png');
+      background-size: cover;
+      background-position: center;
+      width: 100%;
+      padding: 4vw;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4vw;
+      justify-content: center;
+      padding-bottom: 160px;
+    }
+
+    .badge-card {
+    width: 45%;
+    aspect-ratio: 460 / 630;
+    background-image: url('src/badge.png');
+    background-size: cover;
+    background-position: center;
+    border-radius: 0px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 2.5%;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1rem;
+    cursor: pointer;
+  
+  }
+
+    .badge-card span {
+    position: relative;
+    z-index: 1;
+	}
+
+    .badge-check {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    background-color: #00e676;
+    border-radius: 50%;
+    display: none;
+    z-index: 2;
+    left: calc(335 / 460 * 100%);
+    top: calc(477 / 630 * 100%);
+    transform: translate(-50%, -50%);
+  }
+	
+	.badge-number {
+    position: absolute;
+    top: 76px;
+    left: 81px;
+    color: #feb35d;
+    font-size: 1rem;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0,0,0,0);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+    .badge-card.validated .badge-check {
+    display: block;
+  }
+
+    .footer {
+      background: rgba(0, 0, 0, 0.75);
+      color: white; height: 60px;
+      line-height: 60px; text-align: center;
+      font-weight: bold; font-size: 1.2rem;
+      width: 100%; position: fixed;
+      bottom: 0; left: 0;
+      z-index: 1000;
+    }
+
+    .floating-button {
+      position: fixed;
+      bottom: 80px; right: 20px;
+      width: 60px; height: 60px;
+      background-image: url('src/flash.png');
+      background-size: cover;
+      background-position: center;
+      border-radius: 50%;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1001; cursor: pointer;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #feb35d;
+      color: black;
+      padding: 10px 20px;
+      border-radius: 20px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      z-index: 2000;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+	
+	.context-menu {
+  position: fixed;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  display: flex;
+  gap: 20px;
+  padding: 15px 20px;
+  z-index: 3000;
+  display: none;
+  align-items: center;
+}
+
+.context-menu button {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.context-menu button:hover {
+  transform: scale(1.2);
+}
+
+  </style>
+</head>
+<body>
+  <div class="intro-screen" id="introScreen">
+  <video autoplay muted playsinline class="intro-video">
+    <source src="src/intro.mp4" type="video/mp4" />
+    Votre navigateur ne supporte pas la vidéo.
+  </video>
+  <div class="intro-content">
+    <button id="enterBtn">ENTRER</button>
+  </div>
+ </div>
+<div class="context-menu" id="contextMenu">
+  <button id="deleteBtn">🗑️</button>
+  <button id="editBtn">✏️</button>
+  <button id="cancelBtn">❌</button>
+</div>
+<div class="header">
+  <img src="src/header.png" alt="Header Image" class="header-img" />
+  <div class="badge-counter-container">
+    <div class="badge-progress-bg"><span id="badge-counter">0/20</span></div>
+  </div>
+</div>
+
+  <div class="tabs">
+    <div class="tab active"><img src="src/TOUTES.png" alt="toutes" /></div>
+    <div class="tab"><img src="src/ENCOURS.png" alt="en cours" /></div>
+    <div class="tab"><img src="src/VALIDEE.png" alt="validées" /></div>
+    <div class="tab-cursor"></div>
+  </div>
+
+  <div class="badge-section" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">1</div><span>Pas mon style</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">2</div><span>Coup de foutre</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">3</div><span>Twinies</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">4</div><span>Amireux</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">5</div><span>Meuf de taf</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">6</div><span>Rupture</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">7</div><span>Tatouage 12:12</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">8</div><span>Concubin Renault</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">9</div><span>Meuf de garage</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">10</div><span>Meuf de pneus</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">11</div><span>Compagnon Matelas</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">12</div><span>Compagnon chez les parents</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">13</div><span>Compagnon en vacances</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">14</div><span>Colocataire Loft Talkie Walkie</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">15</div><span>Femme/homme de ma vie</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">16</div><span>Meilleur beau-père</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">17</div><span>60 ans</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">18</div><span>Mari & Femme "Vaux de Cerney"</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">19</div><span>Dernière femme/homme de ma vie</span></div>
+  <div class="badge-card"><div class="badge-check"></div><div class="badge-number">20</div><span>Helico bite & Boobs dance</span></div>
+</div>
+
+  <div class="footer">Ajouter un badge</div>
+  <div class="floating-button" id="notifBtn"></div>
+  <div class="toast" id="toast">Flash envoyé à Twinie !</div>
+
+  <script>
+    const enterBtn = document.getElementById('enterBtn');
+    const introScreen = document.getElementById('introScreen');
+    const app = document.querySelector('.app');
+    const tabs = document.querySelectorAll('.tab');
+    const cursor = document.querySelector('.tab-cursor');
+    const badgeCounter = document.getElementById('badge-counter');
+    const toast = document.getElementById('toast');
+    const notifBtn = document.getElementById('notifBtn');
+
+    setTimeout(() => {
+      enterBtn.style.opacity = '1';
+      enterBtn.style.pointerEvents = 'auto';
+    }, 5000);
+
+    enterBtn.addEventListener('click', () => {
+      introScreen.classList.add('slide-up');
+      setTimeout(() => {
+        introScreen.style.display = 'none';
+        updateCursor(0);
+        filterBadges('all');
+        updateBadgeCounter();
+      }, 800);
+    });
+
+    function updateCursor(index) {
+      cursor.style.left = `${index * 33.33}%`;
+    }
+
+    function updateBadgeCounter() {
+      const count = document.querySelectorAll('.badge-card.validated').length;
+      badgeCounter.textContent = `${count}/20`;
+    }
+
+    function filterBadges(filter) {
+      document.querySelectorAll('.badge-card').forEach(card => {
+        const isValid = card.classList.contains('validated');
+        if (
+          filter === 'all' ||
+          (filter === 'pending' && !isValid) ||
+          (filter === 'validated' && isValid)
+        ) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        updateCursor(index);
+        const label = tab.querySelector('img').alt.toLowerCase();
+        if (label.includes("toute")) filterBadges("all");
+        else if (label.includes("cours")) filterBadges("pending");
+        else if (label.includes("valid")) filterBadges("validated");
+      });
+    });
+
+    document.querySelectorAll('.badge-card').forEach(card => {
+      card.addEventListener('click', () => {
+        card.classList.toggle('validated');
+        updateBadgeCounter();
+      });
+    });
+
+    notifBtn.addEventListener('click', () => {
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      updateCursor(0);
+      filterBadges('all');
+      updateBadgeCounter();
+    });
+
+    let currentBadge = null;
+    const contextMenu = document.getElementById('contextMenu');
+
+    document.querySelectorAll('.badge-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentBadge = card;
+        contextMenu.style.display = 'flex';
+      });
+    });
+
+    document.addEventListener('click', () => {
+      contextMenu.style.display = 'none';
+      currentBadge = null;
+    });
+
+    document.getElementById('deleteBtn').addEventListener('click', () => {
+      if (currentBadge) {
+        currentBadge.remove();
+        currentBadge = null;
+        contextMenu.style.display = 'none';
+      }
+    });
+
+    document.getElementById('editBtn').addEventListener('click', () => {
+      if (currentBadge) {
+        const newText = prompt("Modifier le texte du badge :", currentBadge.querySelector('span').textContent);
+        if (newText !== null) {
+          currentBadge.querySelector('span').textContent = newText;
+        }
+        contextMenu.style.display = 'none';
+      }
+    });
+
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+      contextMenu.style.display = 'none';
+      currentBadge = null;
+    });
+  </script>
+
+</body>
+</html>
