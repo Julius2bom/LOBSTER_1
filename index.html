@@ -423,5 +423,84 @@
 }
 
   </style>
+
+<!-- 🔽 Juste AVANT la balise </body> -->
+<div class="context-menu" id="contextMenu">
+  <button id="editBtn">✏️</button>
+  <button id="deleteBtn">🗑️</button>
+  <button id="cancelBtn">❌</button>
+</div>
+
+<style>
+  .context-menu {
+    position: fixed;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    display: none;
+    flex-direction: row;
+    gap: 20px;
+    padding: 15px 20px;
+    z-index: 3000;
+    align-items: center;
+  }
+
+  .context-menu button {
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .context-menu button:hover {
+    transform: scale(1.2);
+  }
+</style>
+
+<script>
+  const contextMenu = document.getElementById('contextMenu');
+  let currentBadge = null;
+
+  document.querySelectorAll('.badge-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currentBadge = card;
+      contextMenu.style.display = 'flex';
+    });
+  });
+
+  document.addEventListener('click', () => {
+    contextMenu.style.display = 'none';
+    currentBadge = null;
+  });
+
+  document.getElementById('cancelBtn').addEventListener('click', () => {
+    contextMenu.style.display = 'none';
+    currentBadge = null;
+  });
+
+  document.getElementById('editBtn').addEventListener('click', () => {
+    if (currentBadge) {
+      const newText = prompt("Modifier le texte du badge :", currentBadge.querySelector('span').textContent);
+      if (newText !== null) {
+        currentBadge.querySelector('span').textContent = newText;
+      }
+      contextMenu.style.display = 'none';
+    }
+  });
+
+  document.getElementById('deleteBtn').addEventListener('click', () => {
+    if (currentBadge) {
+      currentBadge.remove();
+      contextMenu.style.display = 'none';
+      currentBadge = null;
+    }
+  });
+</script>
 </body>
 </html>
+
