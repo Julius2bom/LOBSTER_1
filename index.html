@@ -266,6 +266,18 @@
 
   <script>
     const enterBtn = document.getElementById('enterBtn');
+  const introScreen = document.getElementById('introScreen');
+  const app = document.querySelector('.app');
+
+  // Affiche le bouton ENTRER au bout de 6 secondes
+  setTimeout(() => {
+    enterBtn.style.opacity = '1';
+    enterBtn.style.pointerEvents = 'auto';
+  }, 6000);
+
+  enterBtn.addEventListener('click', () => {
+    introScreen.style.display = 'none';
+    app.style.display = 'block';
 const introScreen = document.getElementById('introScreen');
 const app = document.querySelector('.app');
 
@@ -375,8 +387,9 @@ enterBtn.addEventListener('click', () => {
   font-weight: bold;
   cursor: pointer;
   font-family: 'Montserrat', sans-serif;
-  transition: all 0.3s ease;
-  z-index: 3;
+  transition: opacity 1s ease;
+  opacity: 0;
+  pointer-events: none;
 }
 
 #enterBtn:hover {
