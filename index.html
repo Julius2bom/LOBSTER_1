@@ -265,31 +265,29 @@
   </div>
 
   <script>
-    const enterBtn = document.getElementById('enterBtn');
+  const enterBtn = document.getElementById('enterBtn');
   const introScreen = document.getElementById('introScreen');
   const app = document.querySelector('.app');
+  const tabs = document.querySelectorAll('.tab');
+  const cursor = document.querySelector('.tab-cursor');
+  const badgeCounter = document.getElementById('badge-counter');
+  const toast = document.getElementById('toast');
+  const notifBtn = document.getElementById('notifBtn');
 
-  // Affiche le bouton ENTRER au bout de 6 secondes
+  // ⏱ Afficher le bouton ENTRER après 6 secondes
   setTimeout(() => {
     enterBtn.style.opacity = '1';
     enterBtn.style.pointerEvents = 'auto';
   }, 6000);
 
+  // ✅ Affichage de l'app au clic sur ENTRER
   enterBtn.addEventListener('click', () => {
     introScreen.style.display = 'none';
     app.style.display = 'block';
-const introScreen = document.getElementById('introScreen');
-const app = document.querySelector('.app');
-
-enterBtn.addEventListener('click', () => {
-  introScreen.style.display = 'none';
-  app.style.display = 'block'
-	  
-	  const tabs = document.querySelectorAll('.tab');
-  const cursor = document.querySelector('.tab-cursor');
-  const badgeCounter = document.getElementById('badge-counter');
-  const toast = document.getElementById('toast');
-  const notifBtn = document.getElementById('notifBtn');
+    updateCursor(0);
+    filterBadges('all');
+    updateBadgeCounter();
+  });
 
   function updateCursor(index) {
     cursor.style.left = `${index * 33.33}%`;
@@ -339,13 +337,14 @@ enterBtn.addEventListener('click', () => {
     setTimeout(() => toast.classList.remove('show'), 2000);
   });
 
+  // Init des badges au chargement
   window.addEventListener('DOMContentLoaded', () => {
     updateCursor(0);
     filterBadges('all');
     updateBadgeCounter();
   });
-    });
-  </script>
+</script>
+
 
   <style>
     .intro-screen {
